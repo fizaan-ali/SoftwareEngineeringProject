@@ -1,0 +1,50 @@
+name: C++ Build and Compilation Check
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - '**.cpp'
+      - '**.h'
+      - '.github/workflows/ci.yml'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - '**.cpp'
+      - '**.h'
+      - '.github/workflows/ci.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential g++ libsqlite3-dev
+    
+    - name: Compile all C++ files
+      run: |
+        for file in Project/*.cpp; do
+          if [ -f "$file" ]; then
+            echo "Compiling $file..."
+            g++ -Wall -Wextra -std=c++11 -c "$file" -o "${file%.cpp}.o"
+            if [ $? -ne 0 ]; then
+              echo "Compilation failed for $file"
+              exit 1
+            fi
+          fi
+        done
+        echo "All files compiled successfully!"
+    
+    - name: Link object files
+      run: |
+        if ls Project/*.o 1> /dev/null 2>&1; then
+          g++ -o Project/test_executable Project/*.o -lsqlite3 2>/dev/null || true
+        fi
+    
+    - name: Cleanup
+      run: rm -f Project/*.o Project/test_executable

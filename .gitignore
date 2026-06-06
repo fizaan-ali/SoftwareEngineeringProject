@@ -1,0 +1,37 @@
+# C++ build artifacts
+*.exe
+*.o
+*.obj
+*.out
+
+# IDE and Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Debugger and profiling
+*.gdb
+core
+
+# Database files (local development)
+*.db
+*.sqlite
+*.sqlite3
+
+# Temporary files
+temp*
+tempCodeRunnerFile.*
+
+# Python
+__pycache__/
+*.py[cod]
+
+# System
+.DS_Store
+node_modules/
+
+# Build directories
+build/
+dist/
